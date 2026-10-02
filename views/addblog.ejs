@@ -1,0 +1,40 @@
+<%- include('./partials/head.ejs')%>
+<%- include('./partials/nav.ejs')%>
+<style>
+    body{
+
+    }
+    .addblog_form{
+        margin: 0 40%;
+        width: 400px;
+        height: 400px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        /*background-color: #fff;*/
+    }
+    .addblog_form > form{
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .addblog_form >form >input,textarea{
+        border-radius: 5px;
+        width: 400px;
+
+    }
+</style>
+<div class="addblog_form">
+    <form action="/addblog" method="post" >
+        <label for="title">title</label><br>
+        <input type="text" id="title" name="title"><br>
+        <label for="content">content</label><br>
+        <textarea  id="content" name="content"></textarea><br>
+        <button class="btn btn-dark mt-2" type="submit">send</button>
+    </form>
+
+</div>
+<%- include('./partials/footer.ejs')%>

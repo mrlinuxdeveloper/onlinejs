@@ -1,0 +1,27 @@
+<%- include('./partials/head.ejs') %>
+<body>
+<style>
+    div {
+        margin: 0 20%;
+    }
+</style>
+<%- include('./partials/nav.ejs') %>
+<div>
+
+
+    <p><%= blog.title %></p><br>
+    <p><%= blog.content %></p><br>
+
+    <form action="/editblog/<%= blog._id %>" method="get">
+        <button class="btn btn-secondary" type="submit">edit</button>
+    </form>
+    <form action="/deleteblog/<%= blog._id %>" method="post">
+        <button class="btn btn-danger" type="submit">delete</button>
+    </form>
+
+
+</div>
+<script src="/dist/bootstrap.js"></script>
+<%- include('./partials/footer.ejs') %>
+</body>
+</html>

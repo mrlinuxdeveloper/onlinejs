@@ -1,0 +1,32 @@
+<%- include('./partials/head.ejs') %>
+<body>
+<style>
+    div {
+        margin: 0 20%;
+    }
+</style>
+<%- include('./partials/nav.ejs') %>
+<div>
+    <% if(blog.length > 0){ %>
+    <% blog.forEach((item)=>{ %>
+            <a class="text-bg-dark text-decoration-none" href="/blogditail/<%= item._id%>">
+
+                <p><%= item.title %></p><br>
+                <p><%= item.content %></p><br>
+            </a>
+
+        <form action="/editblog/<%= item._id %>" method="get">
+            <button class="btn btn-secondary" type="submit">edit</button>
+        </form>
+        <form action="/deleteblog/<%= item._id %>" method="post">
+            <button class="btn btn-danger" type="submit">delete</button>
+        </form>
+    <% })}else{ %>
+        <p>this blog is empty...</p>
+    <% } %>
+
+</div>
+<script src="/dist/bootstrap.js"></script>
+<%- include('./partials/footer.ejs') %>
+</body>
+</html>

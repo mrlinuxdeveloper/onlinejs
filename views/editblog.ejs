@@ -1,0 +1,24 @@
+<%- include('./partials/head.ejs')%>
+<body>
+<style>
+    div{
+        margin: 0 20%;
+    }
+</style>
+<%- include('./partials/nav.ejs')%>
+<div>
+
+        <p><%= blog.title %></p><br>
+        <p><%= blog.content %></p><br>
+        <form action="/editblog/<%= blog._id%>" method="post">
+            <label for="title">title</label><br>
+            <input type="text" name="title" value=""><br>
+            <label for="content">content</label><br>
+            <textarea name="content" id="content" cols="30" rows="10"></textarea><br>
+            <button type="submit">update</button>
+        </form>
+
+</div>
+<%- include('./partials/footer.ejs')%>
+</body>
+</html>
