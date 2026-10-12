@@ -1,8 +1,1 @@
-<%- include('./partials/head.ejs')%>
-<body>
-<%- include('./partials/nav.ejs')%>
-    <div>
-        'this is about'
-    </div>
-</body>
-</html>
+<%- include('./partials/head.ejs', { title: 'درباره ما' }) %><body><%- include('./partials/nav.ejs', { active: 'about' }) %><main class="wrap about-page"><span class="eyebrow eyebrow-dark">داستان ما</span><h1>خبر، وقتی ارزش دارد<br><em>که درست روایت شود.</em></h1><p>روایت امروز یک فضای مستقل برای انتشار و خواندن خبر است. اینجا تلاش می‌کنیم اطلاعات را روشن، دقیق و بی‌پیرایه کنار هم بگذاریم تا هر مخاطب بتواند تصویری بهتر از اتفاق‌ها داشته باشد.</p><a class="button button-primary" href="/">بازگشت به خبرها <span>←</span></a></main><%- include('./partials/footer.ejs') %></body></html>

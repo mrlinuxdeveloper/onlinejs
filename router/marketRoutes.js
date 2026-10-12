@@ -1,0 +1,17 @@
+const express = require('express');
+const controller = require('../controller/marketController');
+const { setLanguage } = require('../middleware/locale');
+const adminController = require('../controller/adminController');
+const router = express.Router();
+router.get('/', controller.home);
+router.get('/language/:lang', setLanguage);
+router.get('/dashboard', controller.dashboard);
+router.post('/listings', controller.create);
+router.post('/listings/:id/buy', controller.buy);
+router.get('/admin/login', adminController.loginPage);
+router.post('/admin/login', adminController.login);
+router.post('/admin/logout', adminController.logout);
+router.get('/admin', adminController.requireAdmin, adminController.dashboard);
+router.post('/admin/listings/:id/status', adminController.requireAdmin, adminController.updateStatus);
+router.post('/admin/listings/:id/delete', adminController.requireAdmin, adminController.deleteListing);
+module.exports = router;

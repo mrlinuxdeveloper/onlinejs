@@ -1,131 +1,78 @@
-const express = require('express');
-const router = require("../router/blogRoutes");
-const Blog = require("../models/blogs");
+const mongoose = require('mongoose');
+const Blog = require('../models/blogs');
 
-//index
-function blogIndex(req, res) {
-    res.render("addblog");
-}
-//create
-function blogCrerate(req, res) {
-    console.log(req.body);
-    const blog = new Blog({
-        title: req.body.title,
-        content: req.body.content
-    });
-        blog.save()
-            .then(() => {
-                res.redirect('/');
-            })
-            .catch((err) => {
-                console.log(err);
-                res.status(500).send("Error saving blog");
-            });
-}
-//show
-function blogShow(req, res) {
-    let id = req.params.id;
-    Blog.findById(id)
-        .then(result => {
-            res.render("editblog", {
-                title: "Edit Blog",
-                blog: result
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send("Error loading blog");
-        });
-}
-// showDitail
-function blogShowDitail(req, res) {
-    let id = req.params.id;
-    Blog.findById(id)
-        .then(result => {
-            if(!result){
-                return res.status(404).send("No blog found");
-            }
-            res.render("blogditail", {title : result.title, blog : result});
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send("Error deleting blog");
-        })
-}
-// update
-// async function blogUpdate(req, res) {
-//     try {
-//         const id = req.params.id;
-//
-//         const blog = await Blog.findById(id);
-//
-//         if (!blog) {
-//             return res.status(404).send("Blog not found");
-//         }
-//
-//         await Blog.findByIdAndUpdate(id, {
-//             title: req.body.title ?? blog.title,
-//             content: req.body.content ?? blog.content
-//         });
-//
-//         res.redirect("/");
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send("Error updating blog");
-//     }
-// }
-// for change field item if user changed it
-function blogUpdate(req, res) {
-    const id = req.params.id;
-
-    const updateData = {};
-
-    if (req.body.title && req.body.title.trim() !== "") {
-        updateData.title = req.body.title;
+async function blogHome(req, res, next) {
+    try {
+        const blog = await Blog.find().sort({ createdAt: -1 });
+        res.render('index', { blog });
+    } catch (error) {
+        console.error('Unable to load news:', error.message);
+        res.status(503).render('index', { blog: [], dbUnavailable: true });
     }
+}
 
-    if (req.body.content && req.body.content.trim() !== "") {
-        updateData.content = req.body.content;
-    }
+function blogIndex(req, res) { res.render('addblog'); }
 
-    Blog.findByIdAndUpdate(
-        id,
-        updateData,
-        {
-            returnDocument: 'after',
-            runValidators: true
-        }
-    )
-        .then((blog) => {
-            if (!blog) {
-                return res.status(404).send("Blog not found");
-            }
-
-            res.redirect("/");
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send("Error updating blog");
+async function blogCreate(req, res, next) {
+    const title = (req.body.title || '').trim();
+    const content = (req.body.content || '').trim();
+    if (!title || !content) return res.status(400).render('addblog', { error: 'عنوان و متن خبر را وارد کنید.', values: { title, content } });
+    try {
+        const blog = await Blog.create({ title, content });
+        res.redirect(`/blog/${blog.id}`);
+    } catch (error) {
+        console.error('Unable to create news:', error.message);
+        res.status(503).render('addblog', {
+            error: 'خبر ذخیره نشد؛ ارتباط با پایگاه داده برقرار نیست. کمی بعد دوباره تلاش کنید.',
+            values: { title, content }
         });
-}
-//delete
-function blogDelete(req, res) {
-    let id = req.params.id;
-    Blog.findByIdAndDelete(id)
-        .then(() => {
-            res.redirect("/");
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).send("Error deleting blog");
-        })
+    }
 }
 
-module.exports = {
-    blogIndex,
-    blogCrerate,
-    blogShow,
-    blogUpdate,
-    blogDelete,
-    blogShowDitail
-};
+async function blogShow(req, res, next) {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).render('404');
+    try {
+        const blog = await Blog.findById(req.params.id);
+        if (!blog) return res.status(404).render('404');
+        res.render('editblog', { blog, error: null });
+    } catch (error) { next(error); }
+}
+
+async function blogShowDitail(req, res, next) {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).render('404');
+    try {
+        const blog = await Blog.findById(req.params.id);
+        if (!blog) return res.status(404).render('404');
+        res.render('blogditail', { blog });
+    } catch (error) { next(error); }
+}
+
+async function blogUpdate(req, res, next) {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).render('404');
+    const title = (req.body.title || '').trim();
+    const content = (req.body.content || '').trim();
+    if (!title || !content) {
+        const blog = await Blog.findById(req.params.id);
+        if (!blog) return res.status(404).render('404');
+        return res.status(400).render('editblog', { blog: { ...blog.toObject(), title, content }, error: 'عنوان و متن خبر نمی‌توانند خالی باشند.' });
+    }
+    try {
+        const blog = await Blog.findByIdAndUpdate(req.params.id, { title, content }, { new: true, runValidators: true });
+        if (!blog) return res.status(404).render('404');
+        res.redirect(`/blog/${blog.id}`);
+    } catch (error) {
+        console.error('Unable to update news:', error.message);
+        res.status(503).render('editblog', { blog: { _id: req.params.id, title, content }, error: 'ارتباط با پایگاه داده برقرار نیست؛ تغییرها ذخیره نشدند.' });
+    }
+}
+
+async function blogDelete(req, res, next) {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).render('404');
+    try {
+        const blog = await Blog.findByIdAndDelete(req.params.id);
+        if (!blog) return res.status(404).render('404');
+        res.redirect('/');
+    } catch (error) { next(error); }
+}
+
+module.exports = { blogHome, blogIndex, blogCreate, blogShow, blogUpdate, blogDelete, blogShowDitail };

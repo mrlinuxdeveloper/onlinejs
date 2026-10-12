@@ -1,40 +1,5 @@
-<%- include('./partials/head.ejs')%>
-<%- include('./partials/nav.ejs')%>
-<style>
-    body{
-
-    }
-    .addblog_form{
-        margin: 0 40%;
-        width: 400px;
-        height: 400px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        /*background-color: #fff;*/
-    }
-    .addblog_form > form{
-        width: 400px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    .addblog_form >form >input,textarea{
-        border-radius: 5px;
-        width: 400px;
-
-    }
-</style>
-<div class="addblog_form">
-    <form action="/addblog" method="post" >
-        <label for="title">title</label><br>
-        <input type="text" id="title" name="title"><br>
-        <label for="content">content</label><br>
-        <textarea  id="content" name="content"></textarea><br>
-        <button class="btn btn-dark mt-2" type="submit">send</button>
-    </form>
-
-</div>
-<%- include('./partials/footer.ejs')%>
+<%- include('./partials/head.ejs', { title: 'انتشار خبر' }) %><body>
+<%- include('./partials/nav.ejs', { active: '' }) %>
+<main class="wrap form-page"><a class="back-link" href="/">← بازگشت به صفحه اصلی</a><div class="form-intro"><span class="eyebrow eyebrow-dark">صدای شما مهم است</span><h1>خبر تازه‌ای دارید؟</h1><p>جزئیات را بنویسید تا با مخاطبان روایت امروز به اشتراک بگذارید.</p></div>
+<form class="editor-form" action="/addblog" method="post"><% if (typeof error !== 'undefined' && error) { %><p class="form-error"><%= error %></p><% } %><label for="title">عنوان خبر <span>اجباری</span></label><input id="title" name="title" type="text" maxlength="160" placeholder="یک عنوان روشن و دقیق بنویسید" value="<%= typeof values !== 'undefined' ? values.title : '' %>" required><div class="field-hint">حداکثر ۱۶۰ نویسه</div><label for="content">متن خبر <span>اجباری</span></label><textarea id="content" name="content" rows="10" placeholder="اصل ماجرا چیست؟ جزئیات را اینجا بنویسید…" required><%= typeof values !== 'undefined' ? values.content : '' %></textarea><div class="form-footer"><span>پیش از انتشار، اطلاعات را بازبینی کنید.</span><button class="button button-primary" type="submit">انتشار خبر <span>←</span></button></div></form></main>
+<%- include('./partials/footer.ejs') %></body></html>

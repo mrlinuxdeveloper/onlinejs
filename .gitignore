@@ -81,3 +81,5 @@ coverage/
 *.tgz
 .temp/
 .tmp/
+data/
+*.sqlite

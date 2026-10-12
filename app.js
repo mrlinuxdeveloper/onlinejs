@@ -1,34 +1,23 @@
-const DB = require('./DB');
-const router = require('./router/blogRoutes');
-const express = require('express')
-const {blogIndex, blogShow, blogCrerate} = require("./controller/blogController");
+require('dotenv').config();
+const express = require('express');
+const path = require('path');
+const { initDatabase } = require('./config/database');
+const marketRoutes = require('./router/marketRoutes');
+const { attachLocale, localeFor } = require('./middleware/locale');
 
+const app = express();
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
+app.use(attachLocale);
+app.use('/', marketRoutes);
+app.use((req, res) => res.status(404).render('404', localeFor(req)));
 
-// epp
-const app = express()
+if (require.main === module) {
+  initDatabase();
+  const port = Number(process.env.PORT) || 3001;
+  app.listen(port, () => console.log(`Lootlane is ready at http://localhost:${port}`));
+}
 
-
-// midell waer
-app.use(express.static('public'));
-app.use(express.urlencoded({extended:true}))
-
-
-
-// route
-app.get('/',(req, res)=>{
-    res.render('index');
-})
-router.get('/blog',blogIndex)
-router.get('/blog/:id',blogCrerate)
-router.get('/blog/:id',blogShow)
-router
-
-app.get('/about',(req, res)=>{
-    res.render('about')
-})
-
-app.use((req, res) => {
-    res.status(404).send("Not Found");
-})
-
-DB(app);
+module.exports = app;

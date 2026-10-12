@@ -1,24 +1,2 @@
-<%- include('./partials/head.ejs')%>
-<body>
-<style>
-    div{
-        margin: 0 20%;
-    }
-</style>
-<%- include('./partials/nav.ejs')%>
-<div>
-
-        <p><%= blog.title %></p><br>
-        <p><%= blog.content %></p><br>
-        <form action="/editblog/<%= blog._id%>" method="post">
-            <label for="title">title</label><br>
-            <input type="text" name="title" value=""><br>
-            <label for="content">content</label><br>
-            <textarea name="content" id="content" cols="30" rows="10"></textarea><br>
-            <button type="submit">update</button>
-        </form>
-
-</div>
-<%- include('./partials/footer.ejs')%>
-</body>
-</html>
+<%- include('./partials/head.ejs', { title: 'ویرایش خبر' }) %><body>
+<%- include('./partials/nav.ejs', { active: '' }) %><main class="wrap form-page"><a class="back-link" href="/blog/<%= blog._id %>">← بازگشت به خبر</a><div class="form-intro"><span class="eyebrow eyebrow-dark">به‌روزرسانی محتوا</span><h1>ویرایش خبر</h1><p>تغییرها پس از ذخیره در صفحهٔ خبر نمایش داده می‌شوند.</p></div><form class="editor-form" action="/editblog/<%= blog._id %>" method="post"><% if (error) { %><p class="form-error"><%= error %></p><% } %><label for="title">عنوان خبر</label><input id="title" name="title" type="text" maxlength="160" value="<%= blog.title %>" required><label for="content">متن خبر</label><textarea id="content" name="content" rows="10" required><%= blog.content %></textarea><div class="form-footer"><span>آخرین ویرایش با ذخیره ثبت می‌شود.</span><button class="button button-primary" type="submit">ذخیره تغییرها <span>←</span></button></div></form></main><%- include('./partials/footer.ejs') %></body></html>

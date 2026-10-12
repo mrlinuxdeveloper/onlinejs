@@ -5,13 +5,15 @@ const blogSchema = new Blogs({
     title: {
         type: String,
         required: true,
+        trim: true,
     },
     content: {
         type: String,
         required: true,
+        trim: true,
     }
 
-},{timestamps:true});
+},{timestamps:true, bufferCommands:false});
 const Blog = mongoose.model('Blogs', blogSchema);
 module.exports = Blog;
 

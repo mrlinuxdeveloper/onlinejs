@@ -1,10 +1,17 @@
 {
   "name": "onlinejs",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Bilingual gaming item marketplace demo built with Express, EJS, MVC and SQLite",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "node --watch app.js"
+  },
+  "engines": { "node": ">=22.5" },
+  "dependencies": {
+    "dotenv": "^18.0.5",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1"
   },
   "private": true
 }

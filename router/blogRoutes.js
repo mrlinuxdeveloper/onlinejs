@@ -6,7 +6,7 @@ const router = express.Router();
 // index
 router.get('/addblog',blogController.blogIndex)
 // create
-router.post("/addblog", blogController.blogCrerate)
+router.post("/addblog", blogController.blogCreate)
 // edit blog
 router.get('/editblog/:id', blogController.blogShow);
 // update
@@ -15,5 +15,6 @@ router.post('/editblog/:id', blogController.blogUpdate);
 router.post('/deleteblog/:id',blogController.blogDelete)
 // show ditail
 router.get('/blogditail/:id',blogController.blogShowDitail)
+router.get('/blog/:id', blogController.blogShowDitail)
 
 module.exports = router;
