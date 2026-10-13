@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Lootlane
 
 A bilingual gaming item marketplace demo built with Node.js, Express, EJS, MVC, and SQLite (SQL). It includes a searchable marketplace, seller dashboard, seeded listings, and demo buy/list actions.
@@ -45,3 +46,6 @@ The Steam Community Market emphasizes searchable game/item pages, visible active
 Before handling real trades, add user accounts and session security, game-specific inventory/ownership verification, payment and escrow integration, fraud/dispute workflows, and a delivery mechanism supported by each game. The current buy button marks a demo listing sold; it does not charge money or transfer an item. This is a UI and architecture starter, not a production trading service.
 
 Official references: [Steamworks Web API overview](https://partner.steamgames.com/doc/webapi_overview), [ISteamUser](https://partner.steamgames.com/doc/webapi/ISteamUser), and [ISteamUserAuth](https://partner.steamgames.com/doc/webapi/isteamuserauth).
+=======
+
+>>>>>>> 2e48160bd340abc11b3aa3d0cb3f9c33b22a55e3
